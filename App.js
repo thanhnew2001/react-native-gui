@@ -65,7 +65,7 @@ export default class App extends React.Component {
 
   render() {
     return (
-{!this.state.isLogined?
+
       <Container color="red">
         <Header hasTabs />
         <Tabs>
@@ -83,7 +83,6 @@ export default class App extends React.Component {
             }}>
               <Text>Add</Text>
             </Button>
-
           </Tab>
           <Tab heading="Tab2">
             {!this.state.isLogined?
@@ -97,9 +96,8 @@ export default class App extends React.Component {
           </Tab>
         </Tabs>
       </Container>
-          }
-          :
-          <Login />
-    );
+    )
+        
+          
   }
 }
