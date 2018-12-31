@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, TextInput } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Image } from 'react-native';
 import { Container, Header, Tabs, Tab, Button } from 'native-base';
 
 import Tab2 from './Tab2';
@@ -8,6 +8,7 @@ import Tab3 from './Tab3';
 import ListItem from './ListItem';
 import MovieItem from './MovieItem';
 import Login from './Login';
+import Menu from './Menu'
 
 export default class App extends React.Component {
 
@@ -16,14 +17,34 @@ export default class App extends React.Component {
 
     this.state = {
       isLogined: false,
+      showSword: false,
       contacts: [
         { name: 'David', phone: '029284242' },
         { name: 'Tom', phone: '34928382' }
       ],
 
-      movies: [] //because I would get it from json restful server
+      movies: [], //because I would get it from json restful server,
+      sound: new Expo.Audio.Sound()
+
     }
   }
+
+  async componentWillMount() {
+    await this.state.sound.loadAsync(require('./assets/amb.mp3'));
+  }
+ 
+  async playSound() {
+
+    // console.log(this.state.blocks)
+    try {
+      await this.state.sound.setPositionAsync(0);
+      await this.state.sound.playAsync();
+      // Your sound is playing!
+    } catch (error) {
+      console.log(error)
+    }
+  }
+ 
 
   loginFunction(){
     alert('Has been loged in')
@@ -62,6 +83,15 @@ export default class App extends React.Component {
       });
   }
 
+  goFunction(){
+    alert('Go function triggered')
+  }
+
+  slash(){
+    this.setState({showSword: !this.state.showSword})
+    this.playSound()
+  }
+
 
   render() {
     return (
@@ -92,7 +122,30 @@ export default class App extends React.Component {
             }
           </Tab>
           <Tab heading="Tab3">
-            <Tab3 />
+            
+            <Menu goFunction={this.goFunction.bind(this)} />
+
+            <Button onPress={this.playSound.bind(this)}>
+                <Text>Play music</Text>
+              </Button>
+
+          </Tab>
+
+           <Tab heading="Fruit Ninja">
+            <View>
+            <Image style={{width:50, height:50}} source={require('./assets/fruit.png')} />
+
+            {this.state.showSword? 
+             <Image style={{width: 50, height: 50}} source={require('./assets/sword.png')} />
+              :
+              <View></View>
+            }
+
+               <Button onPress={this.slash.bind(this)}>
+                <Text>Slash</Text>
+              </Button>
+
+            </View>
           </Tab>
         </Tabs>
       </Container>
